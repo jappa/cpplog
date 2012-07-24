@@ -291,10 +291,11 @@ namespace cpplog
 
 #ifndef CPPLOG_NO_SYSTEM_IDS
 			// Get process/thread ID.
-			m_logData->processId	= boost::interprocess::detail::get_current_process_id();
-			m_logData->threadId		= (unsigned long)boost::interprocess::detail::get_current_thread_id();
+			m_logData->processId	= boost::interprocess::ipcdetail::get_current_process_id();
+			m_logData->threadId		= (unsigned long)boost::interprocess::ipcdetail::get_current_thread_id();
 #endif
-            InitLogMessage();
+              if(logLevel < 2)
+			InitLogMessage();
 		}
 
         void InitLogMessage()
@@ -793,6 +794,10 @@ namespace cpplog
 				delete m_forwardTo;
 		}
 
+		void setLoglevel(loglevel_t level)
+		{
+		  m_lowestLevelAllowed = level;
+		}
 		virtual bool sendLogMessage(LogData* logData)
 		{
 			if( logData->level >= m_lowestLevelAllowed )
