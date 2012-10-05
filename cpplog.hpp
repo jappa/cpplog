@@ -195,17 +195,17 @@ namespace cpplog
 
 		// Buffer for our text.
                 //char buffer[k_logBufferSize];
-                std::string buffer;//[k_logBufferSize];
+                //std::string buffer;//[k_logBufferSize];
 
 		// Constructor that initializes our stream.
 		LogData(loglevel_t logLevel)
                 //: stream(buffer, k_logBufferSize), level(logLevel)
-                : stream(buffer), level(logLevel)
+                : level(logLevel)
 #ifndef CPPLOG_NO_SYSTEM_IDS
 			  , processId(0), threadId(0)
 #endif
 		{
-		  buffer.reserve(k_logBufferSize);
+		  //buffer.reserve(k_logBufferSize);
 		}
 
 		virtual ~LogData()
@@ -324,10 +324,12 @@ namespace cpplog
 				// Check if we have a newline.
 			        //m_logData->stream.str().size();
                           //char lastChar = m_logData->buffer[m_logData->stream.pcount() - 1];
-                          char lastChar = m_logData->buffer[m_logData->stream.str().size() - 1];
+			  if(m_logData->stream.str().size())
+			  {
+                                char lastChar = m_logData->stream.str()[m_logData->stream.str().size() - 1];
 				if( lastChar != '\n' )
-					m_logData->stream << std::endl;
-
+				  m_logData->stream << std::endl;
+			  }
 				// Null-terminate.
 				m_logData->stream << '\0';
 
@@ -398,7 +400,7 @@ namespace cpplog
 
 		virtual bool sendLogMessage(LogData* logData)
 		{
-			m_logStream	<< logData->buffer;
+			m_logStream	<< logData->stream.str();
 			m_logStream	<< std::flush;
 
 			return true;
