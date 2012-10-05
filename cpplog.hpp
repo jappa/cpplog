@@ -6,7 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <strstream>
+#include <sstream>
 #include <fstream>
 #include <cstring>
 #include <ctime>
@@ -177,7 +177,7 @@ namespace cpplog
 		static const size_t k_logBufferSize = 20000;
 
 		// Our stream to log data to.
-		std::ostrstream	stream;
+		std::ostringstream	stream;
 		
 		// Captured data.
 		unsigned int level;
@@ -194,15 +194,18 @@ namespace cpplog
 #endif //CPPLOG_NO_SYSTEM_IDS
 
 		// Buffer for our text.
-		char buffer[k_logBufferSize];
+                //char buffer[k_logBufferSize];
+                std::string buffer;//[k_logBufferSize];
 
 		// Constructor that initializes our stream.
 		LogData(loglevel_t logLevel)
-			: stream(buffer, k_logBufferSize), level(logLevel)
+                //: stream(buffer, k_logBufferSize), level(logLevel)
+                : stream(buffer), level(logLevel)
 #ifndef CPPLOG_NO_SYSTEM_IDS
 			  , processId(0), threadId(0)
 #endif
 		{
+		  buffer.reserve(k_logBufferSize);
 		}
 
 		virtual ~LogData()
@@ -319,7 +322,9 @@ namespace cpplog
 			if( !m_flushed )
 			{
 				// Check if we have a newline.
-				char lastChar = m_logData->buffer[m_logData->stream.pcount() - 1];
+			        //m_logData->stream.str().size();
+                          //char lastChar = m_logData->buffer[m_logData->stream.pcount() - 1];
+                          char lastChar = m_logData->buffer[m_logData->stream.str().size() - 1];
 				if( lastChar != '\n' )
 					m_logData->stream << std::endl;
 
