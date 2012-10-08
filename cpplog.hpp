@@ -327,11 +327,11 @@ namespace cpplog
 			  if(m_logData->stream.str().size())
 			  {
                                 char lastChar = m_logData->stream.str()[m_logData->stream.str().size() - 1];
-				if( lastChar != '\n' )
-				  m_logData->stream << std::endl;
+			  	if( lastChar != '\n' )
+			  	  m_logData->stream << std::endl;
 			  }
 				// Null-terminate.
-				m_logData->stream << '\0';
+				//m_logData->stream << '\0';
 
 				// Save the log level.
 				loglevel_t savedLogLevel = m_logData->level;
